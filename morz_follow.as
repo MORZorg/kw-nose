@@ -14,22 +14,27 @@
 	; TODO: 3 dimension, include the z-axis (or whatever dimension we are not
 	; using now).
 
-	; TODO: we could try to estimate this value looking at how many data we
-	; receive morz_dist = 10.
+	; TODO: we could try to estimate this value looking at how many data we receive.
+	morz_dist = 1
+	
 	ACCURACY morz_dist ALWAYS
-	ACCEL 100 ALWAYS
-	DECEL 100 ALWAYS
+	ACCEL 80 ALWAYS
+	DECEL 80 ALWAYS
 	SPEED 10 ALWAYS
-	CP ON
+	CP ON	
 	TOOL globalpinza
 
-	HOME 2
-	JMOVE morz_horizontal
-
+	; HOME 2
+	JMOVE #morz_hor_appro
+	SPEED 3
+	JMOVE #morz_horizontal
+	BREAK
+	
 	.morz_count = 0
 	WHILE TRUE DO
 		; Calculating the velocity that will be used for the speed of the Kiwi.
-		.morz_v = SQRT( morz_vx * morz_vx + morz_vy * morz_vy )
+		.morz_v = SQRT( morz_vx ^ 2 + morz_vy ^ 2 )
+		morz_dist = .morz_v / 10
 		; We need this value with the sign to know the correct direction in
 		; which we have to move.
 		; TODO: Check if gives the angle in the correct way, if is restricted
@@ -39,9 +44,10 @@
 		; Estimating the end point
 		.morz_dx = morz_dist * COS( .morz_theta )
 		.morz_dy = morz_dist * SIN( .morz_theta )
-
+		.morz_dz = 0
+		
 		; Calibrating and moving.
-		SPEED morz_v MM/S
+		SPEED .morz_v MM/S
 		JMOVE SHIFT( HERE BY .morz_dx, .morz_dy, .morz_dz )
 		; Just in case the previous operation makes some trouble. :D
 		; HERE .morz_current
