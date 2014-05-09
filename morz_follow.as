@@ -1,17 +1,30 @@
 .PROGRAM morz_follow()
-  SPEED 10 ALWAYS
-  HOME
-  HOME 2
-  TOOL globalpinza
-  .morz_count = 0
-  ACCURACY 500 ALWAYS
+  morz_dist = 10
+  ACCURACY morz_dist ALWAYS
+  ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
   SPEED 10 ALWAYS
   CP ON
-  WHILE TRUE DO
-    POINT .morz_point = TRANS(morz_x, morz_y, morz_z, 90, 90, -90)
-    JMOVE .morz_point
 
-    print "Program: ", .morz_count
-    .morz_count = .morz_count + 1
+  HOME 2
+  TOOL globalpinza
+  JMOVE morz_horizontal
+  
+  .morz_count = 0
+  WHILE TRUE DO
+	
+    print "Program: ", .morz_count, ",\tv = ", morz_v, ",\ttheta = ", morz_theta
+	
+	morz_dx = morz_dist * COS( morz_theta )
+	morz_dy = morz_dist * SIN( morz_theta )
+	morz_dz = 0
+	
+	SPEED morz_v MM/S
+	HERE morz_current
+	; Working on y (invert y and z)
+	JMOVE SHIFT( morz_current BY morz_dx, morz_dz, morz_dy )
+	
+    print "Program: ", .morz_count, ",\tdx = ", morz_dx, ",\tdy = ", morz_dy, ",\tdz = ", morz_dz
+    .morz_count = .morz_count+1
   END
 .END
