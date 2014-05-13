@@ -11,9 +11,11 @@
 	;   Rizzini Mattia
 	;   Zucchelli Maurizio
 
+	morz_sig = 2048
+	
 	.morz_angle = 0
 	.morz_radius = 100
-	.morz_dangle = 0.1
+	.morz_dangle = 0.5
 	.morz_circ = 360
 	.morz_v_const = 5
 
@@ -25,8 +27,13 @@
         ;; 
 		; Creating the point on the circumference, taking the morz_horizontal
 		; point as its center.
-		.morz_new_x = .morz_radius * COS( .morz_angle ) + DX( morz_horizontal ) + .morz_radius / 2 * SIN( .morz_angle * 7 )
+		; CIRCLE
+		.morz_new_x = .morz_radius * COS( .morz_angle ) + DX( morz_horizontal ) + .morz_radius / 2 * SIN( .morz_angle * 7 )	
 		.morz_new_y = .morz_radius * SIN( .morz_angle ) + DY( morz_horizontal ) + .morz_radius / 2 * COS( .morz_angle * 7 )
+		
+		; SINUSOID
+		;.morz_new_x = .morz_radius * COS( 2 * .morz_angle ) + DX( morz_horizontal )
+		;.morz_new_y = .morz_radius * .morz_angle / 360 - .morz_radius + DY( morz_horizontal )
 
         HERE .morz_current
         .morz_old_x = DX( .morz_current )
@@ -39,11 +46,14 @@
 		morz_vx = ( .morz_new_x - .morz_old_x ) * .morz_v_const
 		morz_vy = ( .morz_new_y - .morz_old_y ) * .morz_v_const
         morz_vz = 0
-
+		
+		; Notify of the new info
+		SIGNAL morz_sig
+		
 		; Incrementing the angle of the circle.
 		.morz_angle = ( .morz_angle + .morz_dangle ) MOD .morz_circ
 
-		PRINT "Catch me: ", .morz_angle, ",\tvx = ", morz_vx, ",\tvy = ", morz_vy, ",\tvz = ", morz_vz
-		TWAIT 0.01
+		;PRINT "Catch me: ", .morz_angle, ",\tvx = ", morz_vx, ",\tvy = ", morz_vy, ",\tvz = ", morz_vz
+		TWAIT 0.1
 	END
 .END
