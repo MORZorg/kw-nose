@@ -2,8 +2,8 @@
 	; Program which simulates points on a circumference, creating velocity to
 	; reach them.
 	;
-	; Created: 8 May 2014
-	; Last edited: 9 May 2014
+	; Created: 14 May 2014
+	; Last edited: 14 May 2014
 	;
 	; Authors:
 	;   Maddiona Marco
@@ -17,7 +17,7 @@
 	.morz_radius = 30
 	.morz_dangle = 0.1
 	.morz_circ = 360
-	.morz_v_const = 5
+	.morz_v_const = 50
 	.morz_wait = 0.1
 	.morz_count = 0
 

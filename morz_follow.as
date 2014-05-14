@@ -3,7 +3,7 @@
 	; to reach them.
 	;
 	; Created: 8 May 2014
-	; Last edited: 9 May 2014
+	; Last edited: 14 May 2014
 	;
 	; Authors:
 	;   Maddiona Marco
@@ -27,10 +27,11 @@
 	CP ON
 	TOOL globalpinza
 
-	; HOME 2
-	JMOVE #morz_hor_appro
-	SPEED 3
-	JMOVE #morz_horizontal
+	;HOME 2
+	;JMOVE #morz_hor_appro
+	;JMOVE #morz_horizontal
+	
+	JMOVE #morz_rotational 
 	BREAK
 	
 	WHILE TRUE DO
@@ -42,18 +43,25 @@
 		; which we have to move.
 		; TODO: Check if gives the angle in the correct way, if is restricted
 		; in some range or not. (Should be right.)
-		CALL morz_acos( morz_vz / morz_v, .morz_theta )
-		.morz_phi = ATAN2( morz_vy, morz_vx )
+		IF morz_v == 0 THEN
+			morz_dx = 0
+			morz_dy = 0
+			morz_dz = 0
+			morz_v = 50
+		ELSE
+			CALL morz_acos( morz_vz / morz_v, .morz_theta )
+			.morz_phi = ATAN2( morz_vy, morz_vx )
 
-		; Estimating the end point
-		morz_dx = morz_dist * SIN( .morz_theta ) * COS( .morz_phi )
-		morz_dy = morz_dist * SIN( .morz_theta ) * SIN( .morz_phi )
-		morz_dz = morz_dist * COS( .morz_theta )
+			; Estimating the end point
+			morz_dx = morz_dist * SIN( .morz_theta ) * COS( .morz_phi )
+			morz_dy = morz_dist * SIN( .morz_theta ) * SIN( .morz_phi )
+			morz_dz = morz_dist * COS( .morz_theta )
+		END
 		
 		; Calibrating and moving.
 		SPEED morz_v MM/S
 		SIGNAL -morz_sig
-		XMOVE SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) TILL morz_sig
+		XMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) TILL morz_sig
 
 		; PRINT "Follower:\tv = ", morz_v, ",\ttheta = ", .morz_theta, ",\tphi = ", .morz_phi
 	END
