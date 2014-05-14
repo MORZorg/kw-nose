@@ -14,22 +14,25 @@
 	morz_sig = 2048
 	
 	.morz_angle = 0
-	.morz_radius = 100
-	.morz_dangle = 0.5
+	.morz_radius = 30
+	.morz_dangle = 0.1
 	.morz_circ = 360
 	.morz_v_const = 5
+	.morz_wait = 0.1
+	.morz_count = 0
+
+	; POINT morz_horizontal = (1.507,402.609,-160.561,-90.214,179.999,89.784,-134217728.000)
 
 	; TODO: we could use the function DISTANCE in some way to get the distance
 	; between two transformation values.
-
 	WHILE TRUE DO
-
         ;; 
 		; Creating the point on the circumference, taking the morz_horizontal
 		; point as its center.
 		; CIRCLE
 		.morz_new_x = .morz_radius * COS( .morz_angle ) + DX( morz_horizontal ) + .morz_radius / 2 * SIN( .morz_angle * 7 )	
 		.morz_new_y = .morz_radius * SIN( .morz_angle ) + DY( morz_horizontal ) + .morz_radius / 2 * COS( .morz_angle * 7 )
+		.morz_new_z = .morz_radius * COS( .morz_angle * 21 ) + DZ( morz_horizontal )
 		
 		; SINUSOID
 		;.morz_new_x = .morz_radius * COS( 2 * .morz_angle ) + DX( morz_horizontal )
@@ -38,6 +41,7 @@
         HERE .morz_current
         .morz_old_x = DX( .morz_current )
         .morz_old_y = DY( .morz_current )
+		.morz_old_z = DZ( .morz_current )
 
 		; Calculating the velocity for this point: we have to take in account
 		; that these values will have a sign!
@@ -45,15 +49,19 @@
 		; velocity = space. Maybe amplifying could be useful.
 		morz_vx = ( .morz_new_x - .morz_old_x ) * .morz_v_const
 		morz_vy = ( .morz_new_y - .morz_old_y ) * .morz_v_const
-        morz_vz = 0
+        morz_vz = ( .morz_new_z - .morz_old_z ) * .morz_v_const
 		
 		; Notify of the new info
 		SIGNAL morz_sig
 		
-		; Incrementing the angle of the circle.
-		.morz_angle = ( .morz_angle + .morz_dangle ) MOD .morz_circ
+		; Incrementing the angle of the circle, depending on the update time
+		.morz_count = ( .morz_count + 1 ) MOD ( 0.1 / .morz_wait )
+		
+		IF .morz_count == 0 THEN
+			.morz_angle = ( .morz_angle + .morz_dangle ) MOD .morz_circ
+		END
 
-		;PRINT "Catch me: ", .morz_angle, ",\tvx = ", morz_vx, ",\tvy = ", morz_vy, ",\tvz = ", morz_vz
-		TWAIT 0.1
+		; PRINT "Catch me: ", .morz_angle, ",\tvx = ", morz_vx, ",\tvy = ", morz_vy, ",\tvz = ", morz_vz
+		TWAIT .morz_wait
 	END
 .END
