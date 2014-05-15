@@ -3,7 +3,7 @@
 	; reach them.
 	;
 	; Created: 14 May 2014
-	; Last edited: 14 May 2014
+	; Last edited: 15 May 2014
 	;
 	; Authors:
 	;   Maddiona Marco
@@ -18,8 +18,7 @@
 	.morz_y_angle = 0
 	.morz_z_angle = 0
 	.morz_dangle = 1
-	.morz_circ = 20
-	.morz_center = .morz_circ / 2
+	.morz_circ = 360
 	.morz_radius = 10
 	.morz_wait = 0.1
 	.morz_count = 0
@@ -37,11 +36,6 @@
 		morz_ry = .morz_radius * SIN( .morz_angle )
 		morz_rz = .morz_radius * SIN( .morz_angle )
 		
-		; Velocities
-		morz_vx = 0
-		morz_vy = 0
-		morz_vz = 0
-		
 		; Notify of the new info
 		SIGNAL morz_sig
 		
@@ -49,8 +43,7 @@
 		.morz_count = ( .morz_count + 1 ) MOD ( 0.1 / .morz_wait )
 		
 		IF .morz_count == 0 THEN
-			.morz_angle = ( .morz_angle + .morz_dangle ) MOD 360
-			.morz_z_angle = ( .morz_z_angle + .morz_dangle ) MOD .morz_circ 
+			.morz_angle = ( .morz_angle + .morz_dangle ) MOD .morz_circ
 			; PRINT "Catch me: x = ", morz_rx, "\ty = ", morz_ry, "\tz = ", morz_rz
 		END
 		

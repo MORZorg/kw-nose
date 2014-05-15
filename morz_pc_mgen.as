@@ -3,7 +3,7 @@
 	; reach them.
 	;
 	; Created: 8 May 2014
-	; Last edited: 14 May 2014
+	; Last edited: 15 May 2014
 	;
 	; Authors:
 	;   Maddiona Marco
@@ -30,13 +30,13 @@
 		; Creating the point on the circumference, taking the morz_horizontal
 		; point as its center.
 		; CIRCLE
-		.morz_new_x = .morz_radius * COS( .morz_angle ) + DX( morz_horizontal ) + .morz_radius / 2 * SIN( .morz_angle * 7 )	
-		.morz_new_y = .morz_radius * SIN( .morz_angle ) + DY( morz_horizontal ) + .morz_radius / 2 * COS( .morz_angle * 7 )
-		.morz_new_z = .morz_radius * COS( .morz_angle * 21 ) + DZ( morz_horizontal )
+		.morz_new_x = .morz_radius * COS( .morz_angle ) + DX( morz_m_cen ) + .morz_radius / 2 * SIN( .morz_angle * 7 )	
+		.morz_new_y = .morz_radius * SIN( .morz_angle ) + DY( morz_m_cen ) + .morz_radius / 2 * COS( .morz_angle * 7 )
+		.morz_new_z = .morz_radius * COS( .morz_angle * 21 ) + DZ( morz_m_cen )
 		
 		; SINUSOID
-		;.morz_new_x = .morz_radius * COS( 2 * .morz_angle ) + DX( morz_horizontal )
-		;.morz_new_y = .morz_radius * .morz_angle / 360 - .morz_radius + DY( morz_horizontal )
+		;.morz_new_x = .morz_radius * COS( 2 * .morz_angle ) + DX( morz_m_cen )
+		;.morz_new_y = .morz_radius * .morz_angle / 360 - .morz_radius + DY( morz_m_cen )
 
         HERE .morz_current
         .morz_old_x = DX( .morz_current )

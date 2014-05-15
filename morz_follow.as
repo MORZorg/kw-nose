@@ -3,7 +3,7 @@
 	; to reach them.
 	;
 	; Created: 8 May 2014
-	; Last edited: 14 May 2014
+	; Last edited: 15 May 2014
 	;
 	; Authors:
 	;   Maddiona Marco
@@ -22,17 +22,19 @@
 
 	ACCURACY 500 ALWAYS
 	ACCEL 100 ALWAYS
-	DECEL 50 ALWAYS
+	DECEL 100 ALWAYS
 	SPEED 10 ALWAYS
 	CP ON
 	TOOL globalpinza
 
-	;HOME 2
+	HOME 2
 	;JMOVE #morz_hor_appro
 	;JMOVE #morz_horizontal
 	
 	JMOVE #morz_rotational 
 	BREAK
+	
+	ONE morz_returne
 	
 	WHILE TRUE DO
 		; Calculating the velocity that will be used for the speed of the Kiwi.
@@ -56,7 +58,18 @@
 			morz_dx = morz_dist * SIN( .morz_theta ) * COS( .morz_phi )
 			morz_dy = morz_dist * SIN( .morz_theta ) * SIN( .morz_phi )
 			morz_dz = morz_dist * COS( .morz_theta )
+			; IF -INRANGE( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) ) THEN
+			; 	morz_dx = 0
+			; 	morz_dy = 0
+			; 	morz_dz = 0
+			; END
 		END
+		
+		; IF INRANGE( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) THEN
+		; 	morz_rx = 0
+		; 	morz_ry = 0
+		; 	morz_rz = 0
+		; END
 		
 		; Calibrating and moving.
 		SPEED morz_v MM/S
@@ -69,4 +82,13 @@
 
 .PROGRAM morz_acos( .morz_x, .morz_result )
 	.morz_result = 2 * ATAN2( SQRT( 1 - .morz_x ^ 2 ), 1 + .morz_x )
+.END
+
+.PROGRAM morz_returne()
+	CLOSEI
+	TWAIT 0.05
+	OPENI
+	TwAIT 0.05
+	ONE morz_returne
+	RETURNE
 .END
