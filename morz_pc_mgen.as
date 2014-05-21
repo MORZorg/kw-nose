@@ -20,6 +20,8 @@
 	.morz_v_const = 50
 	.morz_wait = 0.1
 	.morz_count = 0
+	
+	DECOMPOSE .morz_m_c[0] = morz_m_cen
 
 	; POINT morz_horizontal = (1.507,402.609,-160.561,-90.214,179.999,89.784,-134217728.000)
 
@@ -30,18 +32,18 @@
 		; Creating the point on the circumference, taking the morz_horizontal
 		; point as its center.
 		; CIRCLE
-		.morz_new_x = .morz_radius * COS( .morz_angle ) + DX( morz_m_cen ) + .morz_radius / 2 * SIN( .morz_angle * 7 )	
-		.morz_new_y = .morz_radius * SIN( .morz_angle ) + DY( morz_m_cen ) + .morz_radius / 2 * COS( .morz_angle * 7 )
-		.morz_new_z = .morz_radius * COS( .morz_angle * 21 ) + DZ( morz_m_cen )
+		.morz_new_x = .morz_radius * COS( .morz_angle ) + .morz_m_c[0] + .morz_radius / 2 * SIN( .morz_angle * 7 )
+		.morz_new_y = .morz_radius * SIN( .morz_angle ) + .morz_m_c[1] + .morz_radius / 2 * COS( .morz_angle * 7 )
+		.morz_new_z = .morz_radius * COS( .morz_angle * 21 ) + .morz_m_c[2]
 		
 		; SINUSOID
 		;.morz_new_x = .morz_radius * COS( 2 * .morz_angle ) + DX( morz_m_cen )
 		;.morz_new_y = .morz_radius * .morz_angle / 360 - .morz_radius + DY( morz_m_cen )
 
-        HERE .morz_current
-        .morz_old_x = DX( .morz_current )
-        .morz_old_y = DY( .morz_current )
-		.morz_old_z = DZ( .morz_current )
+        DECOMPOSE .morz_old_val[0] = HERE
+        .morz_old_x = .morz_old_val[0]
+        .morz_old_y = .morz_old_val[1]
+		.morz_old_z = .morz_old_val[2]
 
 		; Calculating the velocity for this point: we have to take in account
 		; that these values will have a sign!

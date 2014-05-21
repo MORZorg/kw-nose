@@ -58,23 +58,14 @@
 			morz_dx = morz_dist * SIN( .morz_theta ) * COS( .morz_phi )
 			morz_dy = morz_dist * SIN( .morz_theta ) * SIN( .morz_phi )
 			morz_dz = morz_dist * COS( .morz_theta )
-			; IF -INRANGE( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) ) THEN
-			; 	morz_dx = 0
-			; 	morz_dy = 0
-			; 	morz_dz = 0
-			; END
 		END
 		
-		; IF INRANGE( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) THEN
-		; 	morz_rx = 0
-		; 	morz_ry = 0
-		; 	morz_rz = 0
-		; END
-		
-		; Calibrating and moving.
-		SPEED morz_v MM/S
-		SIGNAL -morz_sig
-		XMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) TILL morz_sig
+		if SIG( morz_sig ) THEN
+			; Calibrating and moving.
+			SPEED morz_v MM/S
+			SIGNAL -morz_sig
+			XMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) TILL morz_sig
+		END
 
 		; PRINT "Follower:\tv = ", morz_v, ",\ttheta = ", .morz_theta, ",\tphi = ", .morz_phi
 	END
@@ -86,9 +77,9 @@
 
 .PROGRAM morz_returne()
 	CLOSEI
-	TWAIT 0.05
+	TWAIT 0.5
 	OPENI
-	TwAIT 0.05
+	TwAIT 0.5
 	ONE morz_returne
 	RETURNE
 .END
