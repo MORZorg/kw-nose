@@ -15,7 +15,9 @@
 	; using now).
 
 	; TODO: we could try to estimate this value looking at how many data we receive.
-	morz_dist = 50
+	morz_dist = 10
+	morz_on_move = 2042
+	morz_sig = 2048
 	
 	; POINT #morz_hor_appro = {0.214,25.965,-110.200,0.000,-43.840,-45.214}
 	; POINT #morz_horizontal = {0.214,28.684,-110.738,0.000,-40.579,-45.216}
@@ -28,10 +30,11 @@
 	TOOL globalpinza
 
 	HOME 2
-	;JMOVE #morz_hor_appro
-	;JMOVE #morz_horizontal
-	
-	JMOVE #morz_rotational 
+	; JMOVE #morz_hor_appro
+	; JMOVE #morz_horizontal
+	; JMOVE #morz_rotational
+	; JMOVE #morz_isengard
+	JMOVE #morz_wood_hor
 	BREAK
 	
 	ONE morz_returne
@@ -62,9 +65,12 @@
 		
 		if SIG( morz_sig ) THEN
 			; Calibrating and moving.
+			morz_v = SQRT( morz_v )
 			SPEED morz_v MM/S
 			SIGNAL -morz_sig
-			XMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) TILL morz_sig
+			PULSE morz_on_move, ( morz_dist / morz_v ) / 2
+			XMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) ) TILL -morz_on_move
+			; XMOVE ( HERE + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) TILL morz_sig
 		END
 
 		; PRINT "Follower:\tv = ", morz_v, ",\ttheta = ", .morz_theta, ",\tphi = ", .morz_phi
@@ -77,9 +83,9 @@
 
 .PROGRAM morz_returne()
 	CLOSEI
-	TWAIT 0.5
+	TWAIT 0.1
 	OPENI
-	TwAIT 0.5
+	TwAIT 0.2
 	ONE morz_returne
 	RETURNE
 .END

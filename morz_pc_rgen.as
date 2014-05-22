@@ -14,9 +14,9 @@
 	morz_sig = 2048
 	
 	.morz_angle = 0
+	.morz_radius = 10
 	.morz_dangle = 1
 	.morz_circ = 360
-	.morz_radius = 15
 	.morz_wait = 0.1
 	.morz_count = 0
 
@@ -26,13 +26,13 @@
 	
 	WHILE TRUE DO
 		; Creating the rotation values for Kiwi
-		; morz_rx = .morz_x_angle - .morz_center
-		; morz_ry = morz_rx
-		; morz_rz = morz_rx
 		
-		.morz_new_rx = .morz_radius * COS( .morz_angle ) + .morz_m_c[3]
-		.morz_new_ry = .morz_radius * SIN( .morz_angle ) + .morz_m_c[4]
-		.morz_new_rz = 3 * .morz_radius * SIN( .morz_angle ) + .morz_m_c[5]
+		; .morz_new_rx = .morz_radius * COS( .morz_angle ) + .morz_m_c[3]
+		; .morz_new_ry = .morz_radius * SIN( .morz_angle ) + .morz_m_c[4]
+		; .morz_new_rz = .morz_radius * SIN( .morz_angle ) + .morz_m_c[5]
+		.morz_new_rx = .morz_m_c[3] + 5
+		.morz_new_ry = .morz_m_c[4]
+		.morz_new_rz = .morz_m_c[5]
 		
         DECOMPOSE .morz_old_val[0] = HERE
         .morz_old_rx = .morz_old_val[3]
@@ -51,9 +51,9 @@
 		
 		IF .morz_count == 0 THEN
 			.morz_angle = ( .morz_angle + .morz_dangle ) MOD .morz_circ
-			; PRINT "Catch me: nrx = ", .morz_new_rx, "\tnry = ", .morz_new_ry, "\tnrz = ", .morz_new_rz
-			; PRINT "Catch me: orx = ", .morz_old_rx, "\tory = ", .morz_old_ry, "\torz = ", .morz_old_rz
-			; PRINT "Catch me: rx = ", morz_rx, "\try = ", morz_ry, "\trz = ", morz_rz
+			PRINT "Catch me: nrx = ", .morz_new_rx, "\tnry = ", .morz_new_ry, "\tnrz = ", .morz_new_rz
+			PRINT "Catch me: orx = ", .morz_old_rx, "\tory = ", .morz_old_ry, "\torz = ", .morz_old_rz
+			PRINT "Catch me: rx = ", morz_rx, "\try = ", morz_ry, "\trz = ", morz_rz
 		END
 		
 		TWAIT .morz_wait

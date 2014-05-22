@@ -14,12 +14,12 @@
 	morz_sig = 2048
 	
 	.morz_angle = 0
-	.morz_radius = 30
-	.morz_dangle = 0.1
+	.morz_radius = 50
+	.morz_dangle = 0.05
 	.morz_circ = 360
-	.morz_v_const = 50
-	.morz_wait = 0.1
+	.morz_wait = 0.01
 	.morz_count = 0
+	.morz_v_const = 1
 	
 	DECOMPOSE .morz_m_c[0] = morz_m_cen
 
@@ -34,7 +34,8 @@
 		; CIRCLE
 		.morz_new_x = .morz_radius * COS( .morz_angle ) + .morz_m_c[0] + .morz_radius / 2 * SIN( .morz_angle * 7 )
 		.morz_new_y = .morz_radius * SIN( .morz_angle ) + .morz_m_c[1] + .morz_radius / 2 * COS( .morz_angle * 7 )
-		.morz_new_z = .morz_radius * COS( .morz_angle * 21 ) + .morz_m_c[2]
+		; .morz_new_z = .morz_radius * COS( .morz_angle * 21 ) + .morz_m_c[2]
+		.morz_new_z = .morz_m_c[2]
 		
 		; SINUSOID
 		;.morz_new_x = .morz_radius * COS( 2 * .morz_angle ) + DX( morz_m_cen )
