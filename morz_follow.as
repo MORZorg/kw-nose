@@ -18,6 +18,8 @@
 	morz_dist = 10
 	morz_on_move = 2042
 	morz_sig = 2048
+
+    morz_r_scale = 5
 	
 	; POINT #morz_hor_appro = {0.214,25.965,-110.200,0.000,-43.840,-45.214}
 	; POINT #morz_horizontal = {0.214,28.684,-110.738,0.000,-40.579,-45.216}
@@ -62,6 +64,10 @@
 			morz_dy = morz_dist * SIN( .morz_theta ) * SIN( .morz_phi )
 			morz_dz = morz_dist * COS( .morz_theta )
 		END
+
+        morz_rx = morz_vrx / morz_r_scale
+        morz_ry = morz_vry / morz_r_scale
+        morz_rz = morz_vrz / morz_r_scale
 		
 		if SIG( morz_sig ) THEN
 			; Calibrating and moving.
