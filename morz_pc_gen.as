@@ -49,9 +49,20 @@
 		; that these values will have a sign!
 		; TODO I'm not taking in account the time, so what I'm saying is that
 		; velocity = space. Maybe amplifying could be useful.
-		morz_vx = ( .morz_new_x - .morz_old_val[0] ) * .morz_v_const
-		morz_vy = ( .morz_new_y - .morz_old_val[1] ) * .morz_v_const
-        morz_vz = ( .morz_new_z - .morz_old_val[2] ) * .morz_v_const
+		.morz_tool_vx = ( .morz_new_x - .morz_old_val[0] ) * .morz_v_const
+		.morz_tool_vy = ( .morz_new_y - .morz_old_val[1] ) * .morz_v_const
+        .morz_tool_vz = ( .morz_new_z - .morz_old_val[2] ) * .morz_v_const
+		
+		; AS sucks
+		morz_base_vx = 0
+		morz_base_vy = 0
+		morz_base_vz = 0
+		
+		; The translation values created are referred to the tool axis system.
+		; Since the movement is executed via a SHIFT operation, these values
+		; must be converted to translation values in the base axis system
+		CALL morz_euler_transform( .morz_tool_vx, .morz_tool_vy, .morz_tool_vz, .morz_old_val[3], .morz_old_val[4], .morz_old_val[5], morz_base_vx, morz_base_vy, morz_base_vz )
+		
 		; Creating the rotation values for Kiwi
 		; morz_rx = .morz_x_angle - .morz_center
 		; morz_ry = morz_rx
@@ -79,4 +90,12 @@
 		; PRINT "Catch me: ", .morz_angle, ",\tvx = ", morz_vx, ",\tvy = ", morz_vy, ",\tvz = ", morz_vz
 		TWAIT .morz_wait
 	END
+.END
+
+.PROGRAM morz_euler_transform( .morz_from_vx, .morz_from_vy, .morz_from_vz, .alpha, .beta, .gamma, .morz_to_vx, .morz_to_vy, .morz_to_vz )
+	.morz_to_vx = ( ( COS( .alpha ) * COS( .beta ) * COS( .gamma ) - SIN( .beta ) * SIN( .gamma ) ) + ( SIN( .alpha ) * COS( .beta ) * COS( .gamma ) - COS( .beta ) * SIN( .gamma ) ) - ( SIN( .beta ) * COS( .gamma ) ) ) * .morz_from_vx;
+	
+	.morz_to_vy = ( ( -1 * COS( .alpha ) * COS( .beta ) * SIN( .gamma ) - SIN( .alpha ) * COS( .gamma ) ) - ( SIN( .alpha ) * COS( .beta ) * SIN( .gamma ) - COS( .alpha ) * COS( .gamma ) ) + ( SIN( .beta ) * SIN( .gamma ) ) ) * .morz_from_vy;
+	
+	.morz_to_vz = ( ( COS( .alpha ) * SIN( .beta ) ) + ( SIN( .alpha ) * SIN( .beta ) ) + ( COS( .beta ) ) ) * .morz_from_vz;
 .END

@@ -42,6 +42,14 @@
 	ONE morz_returne
 	
 	WHILE TRUE DO
+		DECOMPOSE .morz_current[0] = HERE
+	
+		morz_vx = 0
+		morz_vy = 0
+		morz_vz = 0
+		
+		CALL morz_euler_transform( morz_base_vx, morz_base_vy, morz_base_vz, -.morz_current[3], -.morz_current[4], -.morz_current[5], morz_vx, morz_vy, morz_vz )
+		
 		; Calculating the velocity that will be used for the speed of the Kiwi.
 		morz_v = SQRT( morz_vx ^ 2 + morz_vy ^ 2 + morz_vz ^ 2 )
 		;morz_dist = morz_v / 10
@@ -65,9 +73,9 @@
 			morz_dz = morz_dist * COS( .morz_theta )
 		END
 
-        morz_rx = morz_vrx / morz_r_scale
-        morz_ry = morz_vry / morz_r_scale
-        morz_rz = morz_vrz / morz_r_scale
+        ; morz_rx = morz_vrx / morz_r_scale
+        ; morz_ry = morz_vry / morz_r_scale
+        ; morz_rz = morz_vrz / morz_r_scale
 		
 		if SIG( morz_sig ) THEN
 			; Calibrating and moving.
@@ -75,7 +83,7 @@
 			SPEED morz_v MM/S
 			SIGNAL -morz_sig
 			PULSE morz_on_move, ( morz_dist / morz_v ) / 2
-			XMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) ) TILL -morz_on_move
+			XMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) ) TILL - morz_on_move
 			; XMOVE ( HERE + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) TILL morz_sig
 		END
 
