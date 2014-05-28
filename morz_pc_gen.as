@@ -92,10 +92,10 @@
 	END
 .END
 
-.PROGRAM morz_euler_transform( .morz_from_vx, .morz_from_vy, .morz_from_vz, .alpha, .beta, .gamma, .morz_to_vx, .morz_to_vy, .morz_to_vz )
-	.morz_to_vx = ( ( COS( .alpha ) * COS( .beta ) * COS( .gamma ) - SIN( .beta ) * SIN( .gamma ) ) + ( SIN( .alpha ) * COS( .beta ) * COS( .gamma ) - COS( .beta ) * SIN( .gamma ) ) - ( SIN( .beta ) * COS( .gamma ) ) ) * .morz_from_vx;
-	
-	.morz_to_vy = ( ( -1 * COS( .alpha ) * COS( .beta ) * SIN( .gamma ) - SIN( .alpha ) * COS( .gamma ) ) - ( SIN( .alpha ) * COS( .beta ) * SIN( .gamma ) - COS( .alpha ) * COS( .gamma ) ) + ( SIN( .beta ) * SIN( .gamma ) ) ) * .morz_from_vy;
-	
-	.morz_to_vz = ( ( COS( .alpha ) * SIN( .beta ) ) + ( SIN( .alpha ) * SIN( .beta ) ) + ( COS( .beta ) ) ) * .morz_from_vz;
+.PROGRAM morz_euler_transform( .morz_from_x, .morz_from_y, .morz_from_z, .morz_alpha, .morz_beta, .morz_gamma, .morz_to_x, .morz_to_y, .morz_to_z )
+      .morz_to_x = ( COS(.morz_alpha)*COS(.morz_beta)*COS(.morz_gamma) - SIN(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_x + ( SIN(.morz_alpha)*COS(.morz_beta)*COS(.morz_gamma) - COS(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_y - ( SIN(.morz_beta)*COS(.morz_gamma) ) * .morz_from_z;
+      
+      .morz_to_y = ( -COS(.morz_alpha)*COS(.morz_beta)*SIN(.morz_gamma) - SIN(.morz_alpha)*COS(.morz_gamma) ) * .morz_from_x - ( SIN(.morz_alpha)*COS(.morz_beta)*SIN(.morz_gamma) - COS(.morz_alpha)*COS(.morz_gamma) ) * .morz_from_y + ( SIN(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_z;
+      
+      .morz_to_z = ( COS(.morz_alpha)*SIN(.morz_beta) ) * .morz_from_x + ( SIN(.morz_alpha)*SIN(.morz_beta) ) * .morz_from_y + ( COS(.morz_beta) ) * .morz_from_z;
 .END
