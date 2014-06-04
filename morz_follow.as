@@ -17,7 +17,8 @@
 	morz_data_sig = 2048
 	morz_reset_sig = 2050
 
-    morz_r_scale = 50
+    morz_v_scale = 100
+    morz_r_scale = 500
 	
 	; POINT #morz_hor_appro = {0.214,25.965,-110.200,0.000,-43.840,-45.214}
 	; POINT #morz_horizontal = {0.214,28.684,-110.738,0.000,-40.579,-45.216}
@@ -32,8 +33,8 @@
 	HOME 2
 	; JMOVE #morz_hor_appro
 	; JMOVE #morz_horizontal
-	; JMOVE #morz_rotational
-	JMOVE #morz_isengard
+	JMOVE #morz_rotational
+	; JMOVE #morz_isengard
 	; JMOVE #morz_wood_hor
 	BREAK
 	
@@ -48,13 +49,13 @@
 		
 		CALL morz_euler_transform( morz_sens_vx, morz_sens_vy, morz_sens_vz, -.morz_current[3], -.morz_current[4], -.morz_current[5], morz_vx, morz_vy, morz_vz )
 		
-		; morz_vx = morz_vx * 1000
-		; morz_vy = morz_vy * 1000
-		; morz_vz = morz_vz * 1000
-		; morz_sens_vrx = morz_sens_vrx * 1000
-		; morz_sens_vry = morz_sens_vry * 1000
-		; morz_sens_vrz = morz_sens_vrz * 1000
-		
+		; morz_vx = morz_vx * 10
+		; morz_vy = morz_vy * 10
+		; morz_vz = morz_vz * 10
+		; morz_sens_vrx = morz_sens_vrx * 10
+		; morz_sens_vry = morz_sens_vry * 10
+		; morz_sens_vrz = morz_sens_vrz * 10
+
 		; Calculating the velocity that will be used for the speed of the Kiwi.
 		morz_v = SQRT( morz_vx ^ 2 + morz_vy ^ 2 + morz_vz ^ 2 )
 		;morz_dist = morz_v / 10
@@ -73,6 +74,7 @@
 			.morz_phi = ATAN2( morz_vy, morz_vx )
 
 			; Estimating the end point
+			morz_dist = morz_v / morz_v_scale
 			morz_dx = morz_dist * SIN( .morz_theta ) * COS( .morz_phi )
 			morz_dy = morz_dist * SIN( .morz_theta ) * SIN( .morz_phi )
 			morz_dz = morz_dist * COS( .morz_theta )
