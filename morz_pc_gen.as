@@ -39,7 +39,7 @@
 		; CIRCLE
 		.morz_new_x = .morz_m_radius * COS( .morz_m_angle ) + .morz_m_c[0] + .morz_m_radius / 2 * SIN( .morz_m_angle * 7 )
 		.morz_new_y = .morz_m_radius * SIN( .morz_m_angle ) + .morz_m_c[1] + .morz_m_radius / 2 * COS( .morz_m_angle * 7 )
-		.morz_new_z = .morz_m_radius * COS( .morz_m_angle * 21 ) + .morz_m_c[2]
+		.morz_new_z = .morz_m_radius / 2 * COS( .morz_m_angle * 21 ) + .morz_m_c[2] + .morz_m_radius / 4
 		
 		; SINUSOID
 		;.morz_new_x = .morz_radius * COS( 2 * .morz_angle ) + DX( morz_m_cen )
@@ -61,7 +61,10 @@
 		; The translation values created are referred to the tool axis system.
 		; Since the movement is executed via a SHIFT operation, these values
 		; must be converted to translation values in the base axis system
-		CALL morz_euler_transform( .morz_tool_vx, .morz_tool_vy, .morz_tool_vz, .morz_old_val[3], .morz_old_val[4], .morz_old_val[5], morz_base_vx, morz_base_vy, morz_base_vz )
+		CALL morz_euler_transform( .morz_tool_vx, .morz_tool_vy, .morz_tool_vz, .morz_old_val[3], .morz_old_val[4], .morz_old_val[5], morz_sens_vx, morz_sens_vy, morz_sens_vz )
+		; PRINT "Converted (", .morz_tool_vx, ", ", .morz_tool_vy, ", ", .morz_tool_vz, " ) into (", morz_base_vx, ", ", morz_base_vy, ", ", morz_base_vz, " )."
+		; CALL morz_euler_transform( morz_base_vx, morz_base_vy, morz_base_vz, .morz_old_val[3], .morz_old_val[4], .morz_old_val[5], .morz_tool_vx, .morz_tool_vy, .morz_tool_vz )
+		; PRINT "Converted (", morz_base_vx, ", ", morz_base_vy, ", ", morz_base_vz, " ) into (", .morz_tool_vx, ", ", .morz_tool_vy, ", ", .morz_tool_vz, " )." 
 		
 		; Creating the rotation values for Kiwi
 		; morz_rx = .morz_x_angle - .morz_center
@@ -72,9 +75,9 @@
 		.morz_new_ry = .morz_r_radius * SIN( .morz_r_angle ) + .morz_m_c[4]
 		.morz_new_rz = .morz_r_radius * SIN( .morz_r_angle ) + .morz_m_c[5]
 		
-		morz_rx = .morz_new_rx - .morz_old_val[3]
-		morz_ry = .morz_new_ry - .morz_old_val[4]
-		morz_rz = .morz_new_rz - .morz_old_val[5]
+		morz_vrx = .morz_new_rx - .morz_old_val[3]
+		morz_vry = .morz_new_ry - .morz_old_val[4]
+		morz_vrz = .morz_new_rz - .morz_old_val[5]
 		
 		; Notify of the new info
 		SIGNAL morz_sig
@@ -93,9 +96,9 @@
 .END
 
 .PROGRAM morz_euler_transform( .morz_from_x, .morz_from_y, .morz_from_z, .morz_alpha, .morz_beta, .morz_gamma, .morz_to_x, .morz_to_y, .morz_to_z )
-      .morz_to_x = ( COS(.morz_alpha)*COS(.morz_beta)*COS(.morz_gamma) - SIN(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_x + ( SIN(.morz_alpha)*COS(.morz_beta)*COS(.morz_gamma) - COS(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_y - ( SIN(.morz_beta)*COS(.morz_gamma) ) * .morz_from_z;
+      .morz_to_x = ( COS(.morz_alpha)*COS(.morz_beta)*COS(.morz_gamma) - SIN(.morz_alpha)*SIN(.morz_gamma) ) * .morz_from_x + ( -COS(.morz_alpha)*COS(.morz_beta)*SIN(.morz_gamma) - SIN(.morz_alpha)*COS(.morz_gamma) ) * .morz_from_y + ( COS(.morz_alpha)*SIN(.morz_beta) ) * .morz_from_z;
       
-      .morz_to_y = ( -COS(.morz_alpha)*COS(.morz_beta)*SIN(.morz_gamma) - SIN(.morz_alpha)*COS(.morz_gamma) ) * .morz_from_x - ( SIN(.morz_alpha)*COS(.morz_beta)*SIN(.morz_gamma) - COS(.morz_alpha)*COS(.morz_gamma) ) * .morz_from_y + ( SIN(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_z;
+      .morz_to_y = ( SIN(.morz_alpha)*COS(.morz_beta)*COS(.morz_gamma) + COS(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_x + ( -SIN(.morz_alpha)*COS(.morz_beta)*SIN(.morz_gamma) + COS(.morz_alpha)*COS(.morz_gamma) ) * .morz_from_y + ( SIN(.morz_alpha)*SIN(.morz_beta) ) * .morz_from_z;
       
-      .morz_to_z = ( COS(.morz_alpha)*SIN(.morz_beta) ) * .morz_from_x + ( SIN(.morz_alpha)*SIN(.morz_beta) ) * .morz_from_y + ( COS(.morz_beta) ) * .morz_from_z;
+      .morz_to_z = ( -SIN(.morz_beta)*COS(.morz_gamma) ) * .morz_from_x + ( SIN(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_y + ( COS(.morz_beta) ) * .morz_from_z;
 .END
