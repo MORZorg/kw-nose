@@ -19,6 +19,7 @@
 
     morz_v_scale = 100
     morz_r_scale = 500
+	morz_t_scale = 2
 	
 	; POINT #morz_hor_appro = {0.214,25.965,-110.200,0.000,-43.840,-45.214}
 	; POINT #morz_horizontal = {0.214,28.684,-110.738,0.000,-40.579,-45.216}
@@ -28,14 +29,16 @@
 	DECEL 100 ALWAYS
 	SPEED 10 ALWAYS
 	CP ON
-	TOOL globalpinza
+	; The tool was not here on 6/6/14 :(
+	;TOOL globalpinza
 
 	HOME 2
 	; JMOVE #morz_hor_appro
 	; JMOVE #morz_horizontal
-	JMOVE #morz_rotational
+	; JMOVE #morz_rotational
 	; JMOVE #morz_isengard
 	; JMOVE #morz_wood_hor
+	JMOVE #morz_suicide
 	BREAK
 	
 	ONE morz_returne
@@ -89,8 +92,10 @@
 			morz_v = SQRT( morz_v )
 			SPEED morz_v MM/S
 			SIGNAL -morz_data_sig
-			PULSE morz_move_sig, ( morz_dist / morz_v ) / 2
-			XMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) TILL - morz_move_sig
+			SIGNAL morz_move_sig
+			PULSE morz_move_sig, ( morz_dist / morz_v ) / morz_t_scale
+			XMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) TILL -morz_move_sig
+			; LMOVE ( SHIFT( HERE BY morz_dx, morz_dy, morz_dz ) + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) )
 			; XMOVE ( HERE + RX( morz_rx ) + RY( morz_ry ) + RZ( morz_rz ) ) TILL morz_sig
 		ELSE
 			IF SIG( morz_reset_sig ) THEN
