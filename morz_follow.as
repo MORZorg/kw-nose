@@ -3,7 +3,7 @@
 	; to reach them.
 	;
 	; Created: 8 May 2014
-	; Last edited: 15 May 2014
+	; Last edited: 9 June 2014
 	;
 	; Authors:
 	;   Maddiona Marco
@@ -18,21 +18,21 @@
 	morz_reset_sig = 2050
 
     morz_v_scale = 100
-    morz_r_scale = 500
+    morz_r_scale = 1000
 	morz_t_scale = 2
 	
 	; POINT #morz_hor_appro = {0.214,25.965,-110.200,0.000,-43.840,-45.214}
 	; POINT #morz_horizontal = {0.214,28.684,-110.738,0.000,-40.579,-45.216}
 
 	ACCURACY 500 ALWAYS
-	ACCEL 100 ALWAYS
-	DECEL 100 ALWAYS
+	ACCEL 5 ALWAYS	; 1 < || > 10 is evil
+	DECEL 5 ALWAYS	; 1 < || > 10 is evil
 	SPEED 10 ALWAYS
 	CP ON
 	; The tool was not here on 6/6/14 :(
 	;TOOL globalpinza
 
-	HOME 2
+	; HOME 2
 	; JMOVE #morz_hor_appro
 	; JMOVE #morz_horizontal
 	; JMOVE #morz_rotational
@@ -50,18 +50,19 @@
 		morz_vy = 0
 		morz_vz = 0
 		
-		CALL morz_euler_transform( morz_sens_vx, morz_sens_vy, morz_sens_vz, -.morz_current[3], -.morz_current[4], -.morz_current[5], morz_vx, morz_vy, morz_vz )
+		CALL morz_euler_transform( morz_sens_vx, morz_sens_vy, morz_sens_vz, .morz_current[3], .morz_current[4], .morz_current[5], morz_vx, morz_vy, morz_vz )
 		
-		; morz_vx = morz_vx * 10
-		; morz_vy = morz_vy * 10
-		; morz_vz = morz_vz * 10
+		; Speed scale (sv=sensor velocity)
+		; morz_sv_scale = 1
+		; morz_vx = morz_vx / morz_sv_scale
+		; morz_vy = morz_vy / morz_sv_scale
+		; morz_vz = morz_vz / morz_sv_scale
 		; morz_sens_vrx = morz_sens_vrx * 10
 		; morz_sens_vry = morz_sens_vry * 10
 		; morz_sens_vrz = morz_sens_vrz * 10
 
-		; Calculating the velocity that will be used for the speed of the Kiwi.
+		; Calculating the velocity that will be used for the speed of the Kiwi (NOTE sqrt is normal)
 		morz_v = SQRT( morz_vx ^ 2 + morz_vy ^ 2 + morz_vz ^ 2 )
-		;morz_dist = morz_v / 10
 		
 		; We need this value with the sign to know the correct direction in
 		; which we have to move.
@@ -90,6 +91,8 @@
 		if SIG( morz_data_sig ) THEN
 			; Calibrating and moving.
 			morz_v = SQRT( morz_v )
+			; Tentative of parametrizing
+			; morz_v = MINVAL( morz_v, 5000 )
 			SPEED morz_v MM/S
 			SIGNAL -morz_data_sig
 			SIGNAL morz_move_sig
@@ -134,7 +137,7 @@
 .PROGRAM morz_euler_transform( .morz_from_x, .morz_from_y, .morz_from_z, .morz_alpha, .morz_beta, .morz_gamma, .morz_to_x, .morz_to_y, .morz_to_z )
       .morz_to_x = ( COS(.morz_alpha)*COS(.morz_beta)*COS(.morz_gamma) - SIN(.morz_alpha)*SIN(.morz_gamma) ) * .morz_from_x + ( -COS(.morz_alpha)*COS(.morz_beta)*SIN(.morz_gamma) - SIN(.morz_alpha)*COS(.morz_gamma) ) * .morz_from_y + ( COS(.morz_alpha)*SIN(.morz_beta) ) * .morz_from_z;
       
-      .morz_to_y = ( SIN(.morz_alpha)*COS(.morz_beta)*COS(.morz_gamma) + COS(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_x + ( -SIN(.morz_alpha)*COS(.morz_beta)*SIN(.morz_gamma) + COS(.morz_alpha)*COS(.morz_gamma) ) * .morz_from_y + ( SIN(.morz_alpha)*SIN(.morz_beta) ) * .morz_from_z;
+      .morz_to_y = ( SIN(.morz_alpha)*COS(.morz_beta)*COS(.morz_gamma) + COS(.morz_alpha)*SIN(.morz_gamma) ) * .morz_from_x + ( -SIN(.morz_alpha)*COS(.morz_beta)*SIN(.morz_gamma) + COS(.morz_alpha)*COS(.morz_gamma) ) * .morz_from_y + ( SIN(.morz_alpha)*SIN(.morz_beta) ) * .morz_from_z;
       
       .morz_to_z = ( -SIN(.morz_beta)*COS(.morz_gamma) ) * .morz_from_x + ( SIN(.morz_beta)*SIN(.morz_gamma) ) * .morz_from_y + ( COS(.morz_beta) ) * .morz_from_z;
 .END
