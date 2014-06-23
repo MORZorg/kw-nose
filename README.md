@@ -16,7 +16,9 @@ This folder contains the following files:
 
 ####How to use
 For the execution in a testing mode, you have to call the pc program with the following command:
+
 *pcexec morz_pc_gen*
 
 Then, to make the robot moves, you have to call the program with the following command:
+
 *exec morz_follow*
