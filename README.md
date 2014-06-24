@@ -26,7 +26,7 @@ or
 
 	pcexec morz_pc_rgen
 
-or for the execution with real data (file not included here):
+or, for the execution with real data (file not included here):
 
 	pcexec qggp_sensorUDP
 
