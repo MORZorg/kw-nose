@@ -1,15 +1,28 @@
 .PROGRAM morz_pc_rgen()
+
+	; Copyright (C) 2014 Marco Maddiona, Riccardo Orizio, Mattia Rizzini, Maurizio Zucchelli
+	;
+	; This program is free software: you can redistribute it and/or modify
+	; it under the terms of the GNU General Public License as published by
+	; the Free Software Foundation, either version 3 of the License, or
+	; (at your option) any later version.
+	;
+	; This program is distributed in the hope that it will be useful,
+	; but WITHOUT ANY WARRANTY; without even the implied warranty of
+	; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	; GNU General Public License for more details.
+	;
+	; You should have received a copy of the GNU General Public License
+	; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	;
+	; For any further information please contact us at
+	; morzorganization@gmail.com
+	; 
 	; Program which simulates points on a circumference, creating velocity to
 	; reach them.
 	;
 	; Created: 14 May 2014
 	; Last edited: 15 May 2014
-	;
-	; Authors:
-	;   Maddiona Marco
-	;   Orizio Riccardo
-	;   Rizzini Mattia
-	;   Zucchelli Maurizio
 
 	morz_sig = 2048
 	
