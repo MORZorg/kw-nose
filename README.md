@@ -16,17 +16,23 @@ This folder contains the following files:
 ##How to use
 For the execution with simulated data, you have to execute one of the following PC programs:
 
-	`pcexec morz_pc_gen`
-	`pcexec morz_pc_mgen`
-	`pcexec morz_pc_rgen`
+	pcexec morz_pc_gen
 
-or for the execution with real data:
+or
 
-	`pcexec qggp_sensorUDP` (not included here)
+	pcexec morz_pc_mgen
+
+or
+
+	pcexec morz_pc_rgen
+
+or for the execution with real data (file not included here):
+
+	pcexec qggp_sensorUDP
 
 finally, to make the robot move, you have to call the program:
 
-	`exec morz_follow`
+	exec morz_follow
 
 ##Authors:
  * Marco Maddiona
